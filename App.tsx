@@ -6,12 +6,13 @@ import OnboardingScreen from './src/screens/Onboarding/OnboardingScreen';
 import RegisterScreen from './src/screens/Register/RegisterScreen';
 import LoginScreen from './src/screens/Login/LoginScreen';
 import OTPScreen from './src/screens/OTP/OTPScreen';
+import FavoriteScreen from './src/screens/Favorite/FavoriteScreen';
 import HomeScreen from './src/screens/Home/HomeScreen';
 import DetailsScreen from './src/screens/Details/DetailsScreen';
 
 const Stack = createNativeStackNavigator();
 
-export default function App(){
+export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
@@ -19,6 +20,7 @@ export default function App(){
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="OTP" component={OTPScreen} />
+        <Stack.Screen name="Favorite" component={FavoriteScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>

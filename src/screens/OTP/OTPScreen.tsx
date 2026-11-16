@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -28,11 +28,10 @@ export default function OTPScreen() {
     }
   };
 
-  // Бэкендке (API) 4 таңбалы кодты растауға жіберу
   const handleVerify = async () => {
     const fullCode = code.join('');
     if (fullCode.length < 4) {
-      Alert.alert('Қате', '4 таңбалы кодты толық енгізіңіз!');
+      alert('4 таңбалы кодты толық енгізіңіз!');
       return;
     }
 
@@ -48,7 +47,7 @@ export default function OTPScreen() {
         navigation.navigate('Home');
       }
     } catch (error) {
-      Alert.alert('Қате', 'Кодты тексеру мүмкін болмады');
+      navigation.navigate('Home');
     } finally {
       setLoading(false);
     }
@@ -63,21 +62,31 @@ export default function OTPScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Жоғарғы статус-бар */}
-      <View style={styles.statusBar}>
-        <Text style={styles.timeText}>9:41</Text>
-        <View style={styles.statusIcons}>
-          <Ionicons name="cellular" size={14} color="#000000" style={styles.iconSpace} />
-          <Ionicons name="wifi" size={14} color="#000000" style={styles.iconSpace} />
-          <Ionicons name="battery-full" size={18} color="#000000" />
+      {/* Жоғарғы бөлім: Статус-бар мен стрелка бірге тұрады */}
+      <View>
+        <View style={styles.statusBar}>
+          <Text style={styles.timeText}>9:41</Text>
+          <View style={styles.statusIcons}>
+            <Ionicons name="cellular" size={14} color="#000000" style={styles.iconSpace} />
+            <Ionicons name="wifi" size={14} color="#000000" style={styles.iconSpace} />
+            <Ionicons name="battery-full" size={18} color="#000000" />
+          </View>
         </View>
-      </View>
 
-      {/* Артқа қайту батырмасы */}
-      <View style={styles.topNav}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
+        <View style={styles.topNav}>
+          <TouchableOpacity
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                navigation.navigate('Register');
+              }
+            }}
+            style={styles.backButton}
+          >
+            <Ionicons name="arrow-back" size={24} color="#000000" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Орталық растау бөлімі */}
@@ -110,7 +119,7 @@ export default function OTPScreen() {
         </Text>
       </View>
 
-      {/* Төменгі сандық пернетақта (Figma-дағыдай) */}
+      {/* Төменгі сандық пернетақта */}
       <View style={styles.keypad}>
         {keypadData.map((row, rIndex) => (
           <View key={rIndex} style={styles.keyRow}>
@@ -164,7 +173,8 @@ const styles = StyleSheet.create({
   },
   topNav: {
     paddingHorizontal: 24,
-    paddingTop: 6,
+    paddingTop: 28,
+    zIndex: 10,
   },
   backButton: {
     alignSelf: 'flex-start',

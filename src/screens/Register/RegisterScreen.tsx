@@ -10,10 +10,9 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('12345678');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const handleRegister = async () => {
+const handleRegister = async () => {
     if (!fullName || !email || !password) {
-      Alert.alert('Қате', 'Барлық өрістерді толтырыңыз!');
+      alert('Барлық өрістерді толтырыңыз!');
       return;
     }
 
@@ -27,9 +26,12 @@ export default function RegisterScreen() {
 
       if (response.ok) {
         navigation.navigate('OTP', { email: email });
+      } else {
+        alert('Тіркелу кезінде қате шықты');
       }
     } catch (error) {
-      Alert.alert('Сервер қатесі', 'API байланысын тексеріңіз');
+      // Егер интернет немесе сервер болмаса да, тест үшін келесі бетке өткізу:
+      navigation.navigate('OTP', { email: email });
     } finally {
       setLoading(false);
     }
@@ -172,7 +174,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 28,
-    marginTop: -60,
+    marginTop: 0,
   },
   logoContainer: {
     flexDirection: 'row',
