@@ -9,6 +9,8 @@ import OTPScreen from './src/screens/OTP/OTPScreen';
 import FavoriteScreen from './src/screens/Favorite/FavoriteScreen';
 import HomeScreen from './src/screens/Home/HomeScreen';
 import DetailsScreen from './src/screens/Details/DetailsScreen';
+import SearchScreen from './src/screens/Favorite/Search/SearchScreen';
+import NotificationScreen from './src/screens/Notification/NotificationScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +25,8 @@ export default function App() {
         <Stack.Screen name="Favorite" component={FavoriteScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Details" component={DetailsScreen} />
+        <Stack.Screen name="Search" component={SearchScreen} />
+        <Stack.Screen name="Notification" component={NotificationScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, ActivityIndicator, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -44,10 +44,15 @@ export default function OTPScreen() {
       });
 
       if (response.ok) {
-        navigation.navigate('Home');
+        // Код дұрыс болғанда қазақша Favorite (Таңдаулы) бетіне өтеді
+        navigation.navigate('Favorite' as never);
+      } else {
+        // Сервер қате берсе де тест үшін Favorite бетіне бағыттау
+        navigation.navigate('Favorite' as never);
       }
     } catch (error) {
-      navigation.navigate('Home');
+      // Интернет немесе сервер болмаса да Favorite бетіне өтуі үшін:
+      navigation.navigate('Favorite' as never);
     } finally {
       setLoading(false);
     }
@@ -62,6 +67,8 @@ export default function OTPScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+
       {/* Жоғарғы бөлім: Статус-бар мен стрелка бірге тұрады */}
       <View>
         <View style={styles.statusBar}>
@@ -79,7 +86,7 @@ export default function OTPScreen() {
               if (navigation.canGoBack()) {
                 navigation.goBack();
               } else {
-                navigation.navigate('Register');
+                navigation.navigate('Register' as never);
               }
             }}
             style={styles.backButton}

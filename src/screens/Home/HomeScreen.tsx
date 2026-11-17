@@ -1,186 +1,371 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  Image,
   SafeAreaView,
+  StatusBar,
+  ScrollView,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-const CATEGORIES = ['All', 'Mountain', 'Beach', 'Camp', 'Forest'];
+const { width } = Dimensions.get('window');
 
-const PLACES = [
+const FILTERS = [
+  'Барлығы',
+  'Ұлттық парктер',
+  'Круиз',
+  'Көлдер',
+  'Жағажай',
+];
+
+const DESTINATIONS = [
   {
     id: '1',
-    title: 'Kolsai Lakes',
-    location: 'Almaty, Kazakhstan',
-    price: '$120',
+    name: 'Көлсай көлдері',
+    country: 'Қазақстан',
     rating: '4.9',
-    category: 'Mountain',
-    image: 'https://unsplash.com',
-    description: 'Beautiful mountain lakes surrounded by pine forests and fresh alpine air.',
+    category: 'Көлдер',
+    image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900',
   },
   {
     id: '2',
-    title: 'Bali Island',
-    location: 'Denpasar, Indonesia',
-    price: '$350',
+    name: 'Бали жағажайы',
+    country: 'Индонезия',
     rating: '4.8',
-    category: 'Beach',
-    image: 'https://unsplash.com',
-    description: 'Tropical paradise with crystal clear beaches, temples, and vibrant culture.',
+    category: 'Жағажай',
+    image: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=900',
   },
   {
     id: '3',
-    title: 'Swiss Alps Camp',
-    location: 'Zermatt, Switzerland',
-    price: '$480',
+    name: 'Шарын шатқалы',
+    country: 'Қазақстан',
+    rating: '4.9',
+    category: 'Ұлттық парктер',
+    image: 'https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=900',
+  },
+  {
+    id: '4',
+    name: 'Мальдив аралдары',
+    country: 'Мальдив',
     rating: '5.0',
-    category: 'Camp',
-    image: 'https://unsplash.com',
-    description: 'Unforgettable camping experience under the stars in the heart of the Alps.',
+    category: 'Жағажай',
+    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=900',
+  },
+  {
+    id: '5',
+    name: 'Бурабай',
+    country: 'Қазақстан',
+    rating: '4.8',
+    category: 'Көлдер',
+    image: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=900',
+  },
+  {
+    id: '6',
+    name: 'Швейцария таулары',
+    country: 'Швейцария',
+    rating: '4.9',
+    category: 'Ұлттық парктер',
+    image: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=900',
+  },
+  {
+    id: '7',
+    name: 'Санторини',
+    country: 'Грекия',
+    rating: '4.8',
+    category: 'Круиз',
+    image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=900',
+  },
+  {
+    id: '8',
+    name: 'Үлкен Алматы көлі',
+    country: 'Қазақстан',
+    rating: '4.9',
+    category: 'Көлдер',
+    image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=900',
   },
 ];
 
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredPlaces = PLACES.filter((place) => {
-    const matchesCategory = selectedCategory === 'All' || place.category === selectedCategory;
-    const matchesSearch =
-      place.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      place.location.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const [selectedFilter, setSelectedFilter] = useState('Барлығы');
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState('home');
+
+  const filteredDestinations =
+    selectedFilter === 'Барлығы'
+      ? DESTINATIONS
+      : DESTINATIONS.filter(
+          (item) => item.category === selectedFilter
+        );
+
+  const toggleFavorite = (id: string) => {
+    setFavorites((old) =>
+      old.includes(id)
+        ? old.filter((item) => item !== id)
+        : [...old, id]
+    );
+  };
+
+  const openDestination = (item: any) => {
+    navigation.navigate('Details', { destination: item });
+  };
+
+  const navigateTab = (tab: string, screen: string) => {
+    setActiveTab(tab);
+    if (screen !== 'Home') {
+      navigation.navigate(screen);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Жоғарғы статус-бар */}
-      <View style={styles.statusBar}>
-        <Text style={styles.timeText}>9:41</Text>
-        <View style={styles.statusIcons}>
-          <Ionicons name="cellular" size={14} color="#000000" style={styles.iconSpace} />
-          <Ionicons name="wifi" size={14} color="#000000" style={styles.iconSpace} />
-          <Ionicons name="battery-full" size={18} color="#000000" />
-        </View>
-      </View>
+      <StatusBar hidden={true} />
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        {/* Жоғарғы сәлемдесу */}
-        <View style={styles.header}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* ЖОҒАРҒЫ САҒАТ */}
+        <View style={styles.statusBar}>
+          <Text style={styles.statusTime}>9:41</Text>
+
+          <View style={styles.statusIcons}>
+            <Ionicons name="cellular" size={17} color="#333" />
+            <Ionicons name="wifi" size={17} color="#333" />
+            <Ionicons name="battery-full" size={20} color="#333" />
+          </View>
+        </View>
+
+        {/* ОРНАЛАСҚАН ЖЕР */}
+        <View style={styles.locationRow}>
           <View>
-            <Text style={styles.greeting}>Hello, Bessie 👋</Text>
-            <Text style={styles.headerTitle}>Where do you want to go?</Text>
-          </View>
-          <TouchableOpacity style={styles.notifButton}>
-            <Ionicons name="notifications-outline" size={22} color="#222222" />
-            <View style={styles.notifDot} />
-          </TouchableOpacity>
-        </View>
+            <View style={styles.locationLabelRow}>
+              <Ionicons name="location" size={14} color="#888" />
+              <Text style={styles.locationLabel}>Орналасқан жер</Text>
+            </View>
 
-        {/* Іздеу жолағы */}
-        <View style={styles.searchRow}>
-          <View style={styles.searchBox}>
-            <Ionicons name="search-outline" size={20} color="#8E8E93" />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search destination..."
-              placeholderTextColor="#8E8E93"
-              value={searchQuery}
-              onChangeText={setSearchQuery}
+            <TouchableOpacity style={styles.locationSelect}>
+              <Text style={styles.locationText}>Алматы, Қазақстан</Text>
+              <Ionicons name="chevron-down" size={15} color="#333" />
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity
+            style={styles.profileButton}
+            onPress={() => navigation.navigate('Profile')}
+          >
+            <Image
+              source={{
+                uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200',
+              }}
+              style={styles.profileImage}
             />
-          </View>
-          <TouchableOpacity style={styles.filterButton}>
-            <Ionicons name="options-outline" size={22} color="#FFFFFF" />
+            <View style={styles.onlineDot} />
           </TouchableOpacity>
         </View>
 
-        {/* Санаттар */}
-        <Text style={styles.sectionTitle}>Category</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesList}>
-          {CATEGORIES.map((cat) => {
-            const isActive = selectedCategory === cat;
+        {/* БАСТЫ ТАҚЫРЫП */}
+        <View style={styles.titleContainer}>
+          <Text style={styles.mainTitle}>
+            Қайда барсаң да,{'\n'}әсем мекен сені күтеді
+          </Text>
+        </View>
+
+        {/* СҮЗГІЛЕР */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.filtersContainer}
+        >
+          {FILTERS.map((filter) => {
+            const active = selectedFilter === filter;
+
             return (
               <TouchableOpacity
-                key={cat}
-                style={[styles.categoryChip, isActive && styles.categoryChipActive]}
-                onPress={() => setSelectedCategory(cat)}
+                key={filter}
+                style={[
+                  styles.filterButton,
+                  active && styles.activeFilter,
+                ]}
+                onPress={() => setSelectedFilter(filter)}
               >
-                <Text style={[styles.categoryText, isActive && styles.categoryTextActive]}>
-                  {cat}
+                <Text
+                  style={[
+                    styles.filterText,
+                    active && styles.activeFilterText,
+                  ]}
+                >
+                  {filter}
                 </Text>
               </TouchableOpacity>
             );
           })}
         </ScrollView>
 
-        {/* Танымал бағыттар */}
+        {/* САЯХАТ БАҒЫТТАРЫ */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Popular Destination</Text>
-          <TouchableOpacity>
-            <Text style={styles.seeAllText}>See All</Text>
-          </TouchableOpacity>
+          <Text style={styles.sectionTitle}>Танымал бағыттар</Text>
+          <Text style={styles.sectionMore}>Барлығын көру</Text>
         </View>
 
-        {filteredPlaces.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            style={styles.card}
-            activeOpacity={0.9}
-            onPress={() => navigation.navigate('Details', { place: item })}
-          >
-            <Image source={{ uri: item.image }} style={styles.cardImage} />
-            <View style={styles.ratingBadge}>
-              <FontAwesome name="star" size={12} color="#FFD700" />
-              <Text style={styles.ratingText}>{item.rating}</Text>
-            </View>
+        <View style={styles.destinationsGrid}>
+          {filteredDestinations.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              activeOpacity={0.9}
+              style={styles.destinationCard}
+              onPress={() => openDestination(item)}
+            >
+              <View style={styles.imageContainer}>
+                <Image
+                  source={{ uri: item.image }}
+                  style={styles.destinationImage}
+                />
 
-            <View style={styles.cardInfo}>
-              <View>
-                <Text style={styles.cardTitle}>{item.title}</Text>
-                <View style={styles.locationRow}>
-                  <Ionicons name="location-outline" size={14} color="#549EE7" />
-                  <Text style={styles.locationText}>{item.location}</Text>
+                <TouchableOpacity
+                  style={styles.favoriteButton}
+                  onPress={() => toggleFavorite(item.id)}
+                >
+                  <Ionicons
+                    name={
+                      favorites.includes(item.id)
+                        ? 'heart'
+                        : 'heart-outline'
+                    }
+                    size={20}
+                    color="#F05B55"
+                  />
+                </TouchableOpacity>
+
+                <View style={styles.ratingBadge}>
+                  <Ionicons name="star" size={12} color="#FFB800" />
+                  <Text style={styles.ratingText}>{item.rating}</Text>
                 </View>
               </View>
-              <View style={styles.priceBox}>
-                <Text style={styles.priceText}>{item.price}</Text>
-                <Text style={styles.perPerson}>/person</Text>
+
+              <View style={styles.cardInfo}>
+                <Text style={styles.destinationName}>{item.name}</Text>
+
+                <View style={styles.cardLocation}>
+                  <Ionicons
+                    name="location-outline"
+                    size={13}
+                    color="#888"
+                  />
+                  <Text style={styles.countryText}>{item.country}</Text>
+                </View>
+
+                <Text style={styles.priceText}>Бастапқы бағасы: 5 $ / күн</Text>
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* САНАТТАР */}
+        <View style={styles.categorySection}>
+          <Text style={styles.sectionTitle}>Санаттар</Text>
+
+          <View style={styles.categoryRow}>
+            <TouchableOpacity style={styles.categoryCard}>
+              <Image
+                source={{
+                  uri: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
+                }}
+                style={styles.categoryImage}
+              />
+              <Text style={styles.categoryText}>Жағажайлар</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.categoryCard}>
+              <Image
+                source={{
+                  uri: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400',
+                }}
+                style={styles.categoryImage}
+              />
+              <Text style={styles.categoryText}>Таулар</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.categoryCard}>
+              <Image
+                source={{
+                  uri: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=400',
+                }}
+                style={styles.categoryImage}
+              />
+              <Text style={styles.categoryText}>Көлдер</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={{ height: 110 }} />
       </ScrollView>
 
-      {/* Төменгі навигация */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="home" size={22} color="#549EE7" />
-          <Text style={[styles.navText, { color: '#549EE7' }]}>Home</Text>
-        </TouchableOpacity>
+      {/* ТӨМЕНГІ ҚАЛҚЫМАЛЫ МӘЗІР */}
+      <View style={styles.bottomNavWrapper}>
+        <View style={styles.bottomNav}>
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => navigateTab('home', 'Home')}
+          >
+            <Ionicons
+              name="home"
+              size={23}
+              color={activeTab === 'home' ? '#FFFFFF' : '#AEB8C0'}
+            />
+            <Text style={activeTab === 'home' ? styles.activeNavText : styles.navText}>
+              Басты бет
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Favorite')}
-        >
-          <Ionicons name="heart-outline" size={22} color="#8E8E93" />
-          <Text style={styles.navText}>Favorite</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => navigateTab('search', 'Search')}
+          >
+            <Ionicons
+              name="search"
+              size={23}
+              color={activeTab === 'search' ? '#FFFFFF' : '#AEB8C0'}
+            />
+            <Text style={activeTab === 'search' ? styles.activeNavText : styles.navText}>
+              Іздеу
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Onboarding')}
-        >
-          <Ionicons name="person-outline" size={22} color="#8E8E93" />
-          <Text style={styles.navText}>Profile</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => navigateTab('messages', 'Notifications')}
+          >
+            <Ionicons
+              name="notifications"
+              size={23}
+              color={activeTab === 'messages' ? '#FFFFFF' : '#AEB8C0'}
+            />
+            <Text style={activeTab === 'messages' ? styles.activeNavText : styles.navText}>
+              Хабарлама
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => navigateTab('profile', 'Profile')}
+          >
+            <Ionicons
+              name="person-circle"
+              size={23}
+              color={activeTab === 'profile' ? '#FFFFFF' : '#AEB8C0'}
+            />
+            <Text style={activeTab === 'profile' ? styles.activeNavText : styles.navText}>
+              Профиль
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -189,218 +374,310 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#FFFFFF',
   },
+
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingTop: 5,
+  },
+
   statusBar: {
+    height: 38,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingTop: 12,
-    backgroundColor: '#F8F9FA',
+    justifyContent: 'space-between',
+    paddingHorizontal: 5,
+    marginBottom: 17,
   },
-  timeText: {
-    fontSize: 14,
-    fontWeight: '800',
-    color: '#000000',
+
+  statusTime: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#333333',
   },
+
   statusIcons: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 5,
   },
-  iconSpace: {
-    marginRight: 6,
-  },
-  scrollContent: {
-    paddingHorizontal: 24,
-    paddingTop: 18,
-    paddingBottom: 24,
-  },
-  header: {
+
+  locationRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 27,
   },
-  greeting: {
+
+  locationLabelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginBottom: 7,
+  },
+
+  locationLabel: {
     fontSize: 13,
-    color: '#7C7C7C',
+    color: '#888888',
+  },
+
+  locationSelect: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+  },
+
+  locationText: {
+    fontSize: 16,
     fontWeight: '600',
+    color: '#333333',
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#1A1A1A',
-    marginTop: 2,
-  },
-  notifButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#EAEAEA',
-  },
-  notifDot: {
-    position: 'absolute',
-    top: 10,
-    right: 11,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#FF4D4F',
-  },
-  searchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  searchBox: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    height: 48,
-    borderWidth: 1,
-    borderColor: '#EAEAEA',
-    marginRight: 12,
-  },
-  searchInput: {
-    flex: 1,
-    marginLeft: 10,
-    fontSize: 14,
-    color: '#000000',
-  },
-  filterButton: {
+
+  profileButton: {
     width: 48,
     height: 48,
-    borderRadius: 12,
-    backgroundColor: '#549EE7',
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: '#DDDDDD',
+    padding: 2,
+  },
+
+  profileImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 24,
+  },
+
+  onlineDot: {
+    position: 'absolute',
+    bottom: 1,
+    left: 1,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#35B8D4',
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+  },
+
+  titleContainer: {
+    marginBottom: 24,
+  },
+
+  mainTitle: {
+    fontSize: 29,
+    lineHeight: 38,
+    fontWeight: '800',
+    color: '#292929',
+    letterSpacing: -0.5,
+  },
+
+  filtersContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 9,
+    paddingBottom: 25,
+  },
+
+  filterButton: {
+    height: 40,
+    paddingHorizontal: 17,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: '#E7E7E7',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFFFFF',
   },
+
+  activeFilter: {
+    backgroundColor: '#35434B',
+    borderColor: '#35434B',
+  },
+
+  filterText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#666666',
+  },
+
+  activeFilterText: {
+    color: '#FFFFFF',
+  },
+
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 14,
+    marginBottom: 15,
   },
+
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 21,
     fontWeight: '800',
-    color: '#1A1A1A',
-    marginBottom: 12,
+    color: '#292929',
   },
-  seeAllText: {
+
+  sectionMore: {
     fontSize: 13,
-    color: '#549EE7',
+    color: '#647D8D',
     fontWeight: '600',
   },
-  categoriesList: {
-    marginBottom: 24,
+
+  destinationsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
-  categoryChip: {
-    paddingHorizontal: 18,
-    paddingVertical: 10,
-    borderRadius: 20,
+
+  destinationCard: {
+    width: (width - 49) / 2,
+    marginBottom: 20,
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    marginRight: 10,
   },
-  categoryChipActive: {
-    backgroundColor: '#549EE7',
-    borderColor: '#549EE7',
-  },
-  categoryText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#555555',
-  },
-  categoryTextActive: {
-    color: '#FFFFFF',
-  },
-  card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    marginBottom: 18,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#EEEEEE',
-  },
-  cardImage: {
+
+  imageContainer: {
     width: '100%',
-    height: 170,
+    height: 155,
+    borderRadius: 15,
+    overflow: 'hidden',
+    backgroundColor: '#EEEEEE',
   },
+
+  destinationImage: {
+    width: '100%',
+    height: '100%',
+  },
+
+  favoriteButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   ratingBadge: {
     position: 'absolute',
-    top: 12,
-    right: 12,
+    bottom: 9,
+    left: 9,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    paddingHorizontal: 10,
+    gap: 4,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 8,
     paddingVertical: 5,
-    borderRadius: 12,
+    borderRadius: 9,
   },
+
   ratingText: {
-    color: '#FFFFFF',
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '700',
-    marginLeft: 4,
+    color: '#333333',
   },
-  cardInfo: {flexDirection: 'row',
-justifyContent: 'space-between',
-alignItems: 'center',
-padding: 14,
-},
-cardTitle: {
-fontSize: 16,
-fontWeight: '800',
-color: '#1A1A1A',
-marginBottom: 4,
-},
-locationRow: {
-flexDirection: 'row',
-alignItems: 'center',
-},
-locationText: {
-fontSize: 12,
-color: '#7C7C7C',
-marginLeft: 4,
-},
-priceBox: {
-alignItems: 'flex-end',
-},
-priceText: {
-fontSize: 17,
-fontWeight: '800',
-color: '#549EE7',
-},
-perPerson: {
-fontSize: 11,
-color: '#8E8E93',
-},
-bottomNav: {
-flexDirection: 'row',
-justifyContent: 'space-around',
-alignItems: 'center',
-paddingVertical: 10,
-backgroundColor: '#FFFFFF',
-borderTopWidth: 1,
-borderTopColor: '#EAEAEA',
-},
-navItem: {
-alignItems: 'center',
-},
-navText: {
-fontSize: 11,
-fontWeight: '600',
-color: '#8E8E93',
-marginTop: 3,
-},
+
+  cardInfo: {
+    paddingTop: 10,
+    paddingHorizontal: 3,
+  },
+
+  destinationName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#292929',
+  },
+
+  cardLocation: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 5,
+  },
+
+  countryText: {
+    fontSize: 12,
+    color: '#888888',
+  },
+
+  priceText: {
+    fontSize: 12,
+    color: '#555555',
+    fontWeight: '600',
+    marginTop: 10,
+  },
+
+  categorySection: {
+    marginTop: 5,
+  },
+
+  categoryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 15,
+  },
+
+  categoryCard: {
+    width: '31%',
+  },
+
+  categoryImage: {
+    width: '100%',
+    height: 85,
+    borderRadius: 13,
+  },
+
+  categoryText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#333333',
+    marginTop: 8,
+  },
+
+  bottomNavWrapper: {
+    position: 'absolute',
+    bottom: 13,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+
+  bottomNav: {
+    width: '88%',
+    height: 76,
+    backgroundColor: '#354653',
+    borderRadius: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    paddingHorizontal: 8,
+    elevation: 12,
+    shadowColor: '#000000',
+    shadowOpacity: 0.22,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 5 },
+  },
+
+  navItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+  },
+
+  navText: {
+    fontSize: 10,
+    color: '#AEB8C0',
+    fontWeight: '500',
+  },
+
+  activeNavText: {
+    fontSize: 10,
+    color: '#FFFFFF',
+    fontWeight: '700',
+  },
 });

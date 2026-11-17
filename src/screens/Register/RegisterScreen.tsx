@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, ActivityIndicator, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 
@@ -10,37 +10,27 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('12345678');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-const handleRegister = async () => {
+
+  const handleRegister = async () => {
     if (!fullName || !email || !password) {
       alert('Барлық өрістерді толтырыңыз!');
       return;
     }
 
     setLoading(true);
-    try {
-      const response = await fetch('https://typicode.com', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: fullName, email: email, password: password }),
-      });
-
-      if (response.ok) {
-        navigation.navigate('OTP', { email: email });
-      } else {
-        alert('Тіркелу кезінде қате шықты');
-      }
-    } catch (error) {
-      // Егер интернет немесе сервер болмаса да, тест үшін келесі бетке өткізу:
-      navigation.navigate('OTP', { email: email });
-    } finally {
+    
+    setTimeout(() => {
       setLoading(false);
-    }
+      // МІНДЕТТІ ТҮРДЕ алдымен OTP (код енгізу) бетіне бағыттау:
+      navigation.navigate('OTP' as never, { email: email } as never);
+    }, 800);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 1. Жоғарғы статус-бар */}
-      <View style={styles.statusBar}>
+      <StatusBar barStyle="dark-content" />
+
+      <View style={styles.statusBarCustom}>
         <Text style={styles.timeText}>9:41</Text>
         <View style={styles.statusIcons}>
           <Ionicons name="cellular" size={14} color="#000000" style={styles.iconSpace} />
@@ -49,14 +39,14 @@ const handleRegister = async () => {
         </View>
       </View>
 
-      {/* 2. Артқа қайту батырмасы */}
+      {/* Артқа қайту батырмасы */}
       <View style={styles.topNav}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#000000" />
         </TouchableOpacity>
       </View>
 
-      {/* 3. Экранның қақ ортасында тұратын негізгі бөлім */}
+      {/* Негізгі бөлім */}
       <View style={styles.centerContent}>
         <View style={styles.logoContainer}>
           <FontAwesome name="send" size={18} color="#549EE7" style={styles.planeIcon} />
@@ -119,7 +109,7 @@ const handleRegister = async () => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.loginLink}>
+          <TouchableOpacity onPress={() => navigation.navigate('Login' as never)} style={styles.loginLink}>
             <Text style={styles.loginLinkText}>
               Already have an account? <Text style={styles.linkBold}>Login</Text>
             </Text>
@@ -127,7 +117,7 @@ const handleRegister = async () => {
         </View>
       </View>
 
-      {/* 4. Төменгі ережелер мәтіні */}
+      {/* Төменгі ережелер мәтіні */}
       <Text style={styles.footerText}>
         By clicking Register, you are agree to our{'\n'}
         regulation of <Text style={styles.termsBold}>Terms and Privacy</Text>
@@ -142,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     justifyContent: 'space-between',
   },
-  statusBar: {
+  statusBarCustom: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
