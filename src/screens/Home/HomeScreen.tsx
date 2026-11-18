@@ -16,76 +16,76 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 const { width } = Dimensions.get('window');
 
 const FILTERS = [
-  'Барлығы',
-  'Ұлттық парктер',
-  'Круиз',
-  'Көлдер',
-  'Жағажай',
+  'All',
+  'National Parks',
+  'Cruise',
+  'Lakes',
+  'Beach',
 ];
 
 const DESTINATIONS = [
   {
     id: '1',
-    name: 'Көлсай көлдері',
-    country: 'Қазақстан',
+    name: 'Kolsai Lakes',
+    country: 'Kazakhstan',
     rating: '4.9',
-    category: 'Көлдер',
+    category: 'Lakes',
     image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900',
   },
   {
     id: '2',
-    name: 'Бали жағажайы',
-    country: 'Индонезия',
+    name: 'Bali Beach',
+    country: 'Indonesia',
     rating: '4.8',
-    category: 'Жағажай',
+    category: 'Beach',
     image: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=900',
   },
   {
     id: '3',
-    name: 'Шарын шатқалы',
-    country: 'Қазақстан',
+    name: 'Charyn Canyon',
+    country: 'Kazakhstan',
     rating: '4.9',
-    category: 'Ұлттық парктер',
+    category: 'National Parks',
     image: 'https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=900',
   },
   {
     id: '4',
-    name: 'Мальдив аралдары',
-    country: 'Мальдив',
+    name: 'Maldives',
+    country: 'Maldives',
     rating: '5.0',
-    category: 'Жағажай',
+    category: 'Beach',
     image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=900',
   },
   {
     id: '5',
-    name: 'Бурабай',
-    country: 'Қазақстан',
+    name: 'Burabay',
+    country: 'Kazakhstan',
     rating: '4.8',
-    category: 'Көлдер',
+    category: 'Lakes',
     image: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=900',
   },
   {
     id: '6',
-    name: 'Швейцария таулары',
-    country: 'Швейцария',
+    name: 'Swiss Alps',
+    country: 'Switzerland',
     rating: '4.9',
-    category: 'Ұлттық парктер',
+    category: 'National Parks',
     image: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=900',
   },
   {
     id: '7',
-    name: 'Санторини',
-    country: 'Грекия',
+    name: 'Santorini',
+    country: 'Greece',
     rating: '4.8',
-    category: 'Круиз',
+    category: 'Cruise',
     image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=900',
   },
   {
     id: '8',
-    name: 'Үлкен Алматы көлі',
-    country: 'Қазақстан',
+    name: 'Big Almaty Lake',
+    country: 'Kazakhstan',
     rating: '4.9',
-    category: 'Көлдер',
+    category: 'Lakes',
     image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=900',
   },
 ];
@@ -93,12 +93,12 @@ const DESTINATIONS = [
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
 
-  const [selectedFilter, setSelectedFilter] = useState('Барлығы');
+  const [selectedFilter, setSelectedFilter] = useState('All');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState('home');
 
   const filteredDestinations =
-    selectedFilter === 'Барлығы'
+    selectedFilter === 'All'
       ? DESTINATIONS
       : DESTINATIONS.filter(
           (item) => item.category === selectedFilter
@@ -147,11 +147,11 @@ export default function HomeScreen() {
           <View>
             <View style={styles.locationLabelRow}>
               <Ionicons name="location" size={14} color="#888" />
-              <Text style={styles.locationLabel}>Орналасқан жер</Text>
+              <Text style={styles.locationLabel}>Location</Text>
             </View>
 
             <TouchableOpacity style={styles.locationSelect}>
-              <Text style={styles.locationText}>Алматы, Қазақстан</Text>
+              <Text style={styles.locationText}>Almaty, Kazakhstan</Text>
               <Ionicons name="chevron-down" size={15} color="#333" />
             </TouchableOpacity>
           </View>
@@ -173,7 +173,7 @@ export default function HomeScreen() {
         {/* БАСТЫ ТАҚЫРЫП */}
         <View style={styles.titleContainer}>
           <Text style={styles.mainTitle}>
-            Қайда барсаң да,{'\n'}әсем мекен сені күтеді
+            Where you go,{'\n'}wonderful places await you
           </Text>
         </View>
 
@@ -210,8 +210,15 @@ export default function HomeScreen() {
 
         {/* САЯХАТ БАҒЫТТАРЫ */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Танымал бағыттар</Text>
-          <Text style={styles.sectionMore}>Барлығын көру</Text>
+          <Text style={styles.sectionTitle}>Popular Destinations</Text>
+          
+          {/* See All басылатын етіп өзгертілді */}
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate('ListDestination')}
+          >
+            <Text style={styles.sectionMore}>See All</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.destinationsGrid}>
@@ -261,7 +268,7 @@ export default function HomeScreen() {
                   <Text style={styles.countryText}>{item.country}</Text>
                 </View>
 
-                <Text style={styles.priceText}>Бастапқы бағасы: 5 $ / күн</Text>
+                <Text style={styles.priceText}>Starting from: 5 $ / day</Text>
               </View>
             </TouchableOpacity>
           ))}
@@ -269,7 +276,7 @@ export default function HomeScreen() {
 
         {/* САНАТТАР */}
         <View style={styles.categorySection}>
-          <Text style={styles.sectionTitle}>Санаттар</Text>
+          <Text style={styles.sectionTitle}>Categories</Text>
 
           <View style={styles.categoryRow}>
             <TouchableOpacity style={styles.categoryCard}>
@@ -279,7 +286,7 @@ export default function HomeScreen() {
                 }}
                 style={styles.categoryImage}
               />
-              <Text style={styles.categoryText}>Жағажайлар</Text>
+              <Text style={styles.categoryText}>Beaches</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.categoryCard}>
@@ -289,7 +296,7 @@ export default function HomeScreen() {
                 }}
                 style={styles.categoryImage}
               />
-              <Text style={styles.categoryText}>Таулар</Text>
+              <Text style={styles.categoryText}>Mountains</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.categoryCard}>
@@ -299,7 +306,7 @@ export default function HomeScreen() {
                 }}
                 style={styles.categoryImage}
               />
-              <Text style={styles.categoryText}>Көлдер</Text>
+              <Text style={styles.categoryText}>Lakes</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -320,7 +327,7 @@ export default function HomeScreen() {
               color={activeTab === 'home' ? '#FFFFFF' : '#AEB8C0'}
             />
             <Text style={activeTab === 'home' ? styles.activeNavText : styles.navText}>
-              Басты бет
+              Home
             </Text>
           </TouchableOpacity>
 
@@ -334,13 +341,13 @@ export default function HomeScreen() {
               color={activeTab === 'search' ? '#FFFFFF' : '#AEB8C0'}
             />
             <Text style={activeTab === 'search' ? styles.activeNavText : styles.navText}>
-              Іздеу
+              Search
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.navItem}
-            onPress={() => navigateTab('messages', 'Notifications')}
+            onPress={() => navigateTab('messages', 'Notification')}
           >
             <Ionicons
               name="notifications"
@@ -348,7 +355,7 @@ export default function HomeScreen() {
               color={activeTab === 'messages' ? '#FFFFFF' : '#AEB8C0'}
             />
             <Text style={activeTab === 'messages' ? styles.activeNavText : styles.navText}>
-              Хабарлама
+              Notification
             </Text>
           </TouchableOpacity>
 
@@ -362,7 +369,7 @@ export default function HomeScreen() {
               color={activeTab === 'profile' ? '#FFFFFF' : '#AEB8C0'}
             />
             <Text style={activeTab === 'profile' ? styles.activeNavText : styles.navText}>
-              Профиль
+              Profile
             </Text>
           </TouchableOpacity>
         </View>
@@ -376,12 +383,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-
   scrollContent: {
     paddingHorizontal: 20,
     paddingTop: 5,
   },
-
   statusBar: {
     height: 38,
     flexDirection: 'row',
@@ -390,50 +395,42 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     marginBottom: 17,
   },
-
   statusTime: {
     fontSize: 15,
     fontWeight: '700',
     color: '#333333',
   },
-
   statusIcons: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
   },
-
   locationRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 27,
   },
-
   locationLabelRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
     marginBottom: 7,
   },
-
   locationLabel: {
     fontSize: 13,
     color: '#888888',
   },
-
   locationSelect: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 7,
   },
-
   locationText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333333',
   },
-
   profileButton: {
     width: 48,
     height: 48,
@@ -442,13 +439,11 @@ const styles = StyleSheet.create({
     borderColor: '#DDDDDD',
     padding: 2,
   },
-
   profileImage: {
     width: '100%',
     height: '100%',
     borderRadius: 24,
   },
-
   onlineDot: {
     position: 'absolute',
     bottom: 1,
@@ -460,11 +455,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#FFFFFF',
   },
-
   titleContainer: {
     marginBottom: 24,
   },
-
   mainTitle: {
     fontSize: 29,
     lineHeight: 38,
@@ -472,14 +465,12 @@ const styles = StyleSheet.create({
     color: '#292929',
     letterSpacing: -0.5,
   },
-
   filtersContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 9,
     paddingBottom: 25,
   },
-
   filterButton: {
     height: 40,
     paddingHorizontal: 17,
@@ -490,53 +481,44 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
   },
-
   activeFilter: {
     backgroundColor: '#35434B',
     borderColor: '#35434B',
   },
-
   filterText: {
     fontSize: 12,
     fontWeight: '600',
     color: '#666666',
   },
-
   activeFilterText: {
     color: '#FFFFFF',
   },
-
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 15,
   },
-
   sectionTitle: {
     fontSize: 21,
     fontWeight: '800',
     color: '#292929',
   },
-
   sectionMore: {
     fontSize: 13,
     color: '#647D8D',
     fontWeight: '600',
   },
-
   destinationsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
-
   destinationCard: {
     width: (width - 49) / 2,
     marginBottom: 20,
     backgroundColor: '#FFFFFF',
   },
-
   imageContainer: {
     width: '100%',
     height: 155,
@@ -544,12 +526,10 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#EEEEEE',
   },
-
   destinationImage: {
     width: '100%',
     height: '100%',
   },
-
   favoriteButton: {
     position: 'absolute',
     top: 10,
@@ -561,7 +541,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   ratingBadge: {
     position: 'absolute',
     bottom: 9,
@@ -574,70 +553,58 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 9,
   },
-
   ratingText: {
     fontSize: 11,
     fontWeight: '700',
     color: '#333333',
   },
-
   cardInfo: {
     paddingTop: 10,
     paddingHorizontal: 3,
   },
-
   destinationName: {
     fontSize: 16,
     fontWeight: '700',
     color: '#292929',
   },
-
   cardLocation: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
     marginTop: 5,
   },
-
   countryText: {
     fontSize: 12,
     color: '#888888',
   },
-
   priceText: {
     fontSize: 12,
     color: '#555555',
     fontWeight: '600',
     marginTop: 10,
   },
-
   categorySection: {
     marginTop: 5,
   },
-
   categoryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 15,
   },
-
   categoryCard: {
     width: '31%',
   },
-
   categoryImage: {
     width: '100%',
     height: 85,
     borderRadius: 13,
   },
-
   categoryText: {
     fontSize: 13,
     fontWeight: '700',
     color: '#333333',
     marginTop: 8,
   },
-
   bottomNavWrapper: {
     position: 'absolute',
     bottom: 13,
@@ -645,7 +612,6 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
   },
-
   bottomNav: {
     width: '88%',
     height: 76,
@@ -661,20 +627,17 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 5 },
   },
-
   navItem: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
   },
-
   navText: {
     fontSize: 10,
     color: '#AEB8C0',
     fontWeight: '500',
   },
-
   activeNavText: {
     fontSize: 10,
     color: '#FFFFFF',

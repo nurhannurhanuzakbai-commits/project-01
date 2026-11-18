@@ -22,109 +22,99 @@ import {
   Building2,
   MapPin,
   Wifi,
-  BatteryFull,
   Signal,
   X,
   Star,
 } from 'lucide-react-native';
 
 const CATEGORIES = [
-  { id: 'all', name: 'Барлығы', icon: Compass },
-  { id: 'beach', name: 'Жағажай', icon: Palmtree },
-  { id: 'mountain', name: 'Таулар', icon: Mountain },
-  { id: 'city', name: 'Қалалар', icon: Building2 },
+  { id: 'all', name: 'All', icon: Compass },
+  { id: 'beach', name: 'Beach', icon: Palmtree },
+  { id: 'mountain', name: 'Mountains', icon: Mountain },
+  { id: 'city', name: 'Cities', icon: Building2 },
 ];
 
 const PLACES_DATA = [
   {
     id: 1,
-    name: 'Мальдив аралдары',
-    country: 'Мальдив Республикасы',
+    name: 'Maldives Islands',
+    country: 'Republic of Maldives',
     category: 'beach',
-    placesCount: '120 орын',
+    placesCount: '120 places',
     rating: '4.9',
-    image:
-      'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=900',
+    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=900',
   },
   {
     id: 2,
-    name: 'Швейцария Альпілері',
-    country: 'Церматт, Швейцария',
+    name: 'Swiss Alps',
+    country: 'Zermatt, Switzerland',
     category: 'mountain',
-    placesCount: '85 орын',
+    placesCount: '85 places',
     rating: '4.9',
-    image:
-      'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=900',
+    image: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=900',
   },
   {
     id: 3,
-    name: 'Париж, Эйфель мұнарасы',
-    country: 'Франция',
+    name: 'Paris, Eiffel Tower',
+    country: 'France',
     category: 'city',
-    placesCount: '210 орын',
+    placesCount: '210 places',
     rating: '4.8',
-    image:
-      'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=900',
+    image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=900',
   },
   {
     id: 4,
-    name: 'Бали, Нуса Пенида',
-    country: 'Индонезия',
+    name: 'Bali, Nusa Penida',
+    country: 'Indonesia',
     category: 'beach',
-    placesCount: '150 орын',
+    placesCount: '150 places',
     rating: '4.9',
-    image:
-      'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=900',
+    image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=900',
   },
   {
     id: 5,
-    name: 'Фудзи тауы',
-    country: 'Жапония',
+    name: 'Mount Fuji',
+    country: 'Japan',
     category: 'mountain',
-    placesCount: '64 орын',
+    placesCount: '64 places',
     rating: '4.8',
-    image:
-      'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900',
+    image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900',
   },
   {
     id: 6,
-    name: 'Дубай Марина',
-    country: 'Біріккен Араб Әмірліктері',
+    name: 'Dubai Marina',
+    country: 'United Arab Emirates',
     category: 'city',
-    placesCount: '190 орын',
+    placesCount: '190 places',
     rating: '4.8',
-    image:
-      'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=900',
+    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=900',
   },
   {
     id: 7,
-    name: 'Анталья жағалауы',
-    country: 'Түркия',
+    name: 'Antalya Coast',
+    country: 'Turkey',
     category: 'beach',
-    placesCount: '175 орын',
+    placesCount: '175 places',
     rating: '4.7',
-    image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900',
+    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900',
   },
   {
     id: 8,
-    name: 'Каппадокия',
-    country: 'Невшехир, Түркия',
+    name: 'Cappadocia',
+    country: 'Nevsehir, Turkey',
     category: 'mountain',
-    placesCount: '95 орын',
+    placesCount: '95 places',
     rating: '4.9',
-    image:
-      'https://images.unsplash.com/photo-1500534623283-312aade485b7?w=900',
+    image: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?w=900',
   },
   {
     id: 9,
-    name: 'Рим, Колизей',
-    country: 'Италия',
+    name: 'Rome, Colosseum',
+    country: 'Italy',
     category: 'city',
-    placesCount: '180 орын',
+    placesCount: '180 places',
     rating: '4.8',
-    image:
-      'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=900',
+    image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=900',
   },
 ];
 
@@ -164,26 +154,27 @@ export default function SearchScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* ЖОҒАРҒЫ САҒАТ ПАНЕЛІ */}
+        {/* ЖОҒАРҒЫ СТАТУС ПАНЕЛІ (iPhone стиль: аса қалың сигнал/вайфай және кішірейтілген батарея) */}
         <View style={styles.statusBar}>
           <Text style={styles.timeText}>9:41</Text>
 
           <View style={styles.statusIcons}>
-            <Signal size={16} color="#333333" strokeWidth={2.5} />
-            <Wifi size={16} color="#333333" strokeWidth={2.5} />
-            <BatteryFull
-              size={20}
-              color="#333333"
-              strokeWidth={2.3}
-            />
+            <Signal size={16} color="#000000" strokeWidth={3.5} />
+            <Wifi size={18} color="#000000" strokeWidth={3.5} />
+            <View style={styles.batteryContainer}>
+              <View style={styles.batteryBody}>
+                <View style={styles.batteryFill} />
+              </View>
+              <View style={styles.batteryTip} />
+            </View>
           </View>
         </View>
 
         {/* БЕТ ТАҚЫРЫБЫ */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Саяхат іздеу</Text>
+          <Text style={styles.headerTitle}>Explore Places</Text>
           <Text style={styles.headerSubtitle}>
-            Өзіңе ұнайтын ерекше мекенді тап
+            Find the unique place you like
           </Text>
         </View>
 
@@ -193,7 +184,7 @@ export default function SearchScreen() {
 
           <TextInput
             style={styles.searchInput}
-            placeholder="Баратын жеріңді ізде..."
+            placeholder="Search your destination..."
             placeholderTextColor="#9CA3AF"
             value={searchText}
             onChangeText={setSearchText}
@@ -209,7 +200,7 @@ export default function SearchScreen() {
 
         {/* САНАТТАР */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Санаттар</Text>
+          <Text style={styles.sectionTitle}>Categories</Text>
         </View>
 
         <View style={styles.categoriesContainer}>
@@ -253,11 +244,11 @@ export default function SearchScreen() {
         {/* НӘТИЖЕЛЕР */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>
-            Ұсынылатын орындар
+            Recommended Places
           </Text>
 
           <Text style={styles.resultCount}>
-            {filteredPlaces.length} орын
+            {filteredPlaces.length} places
           </Text>
         </View>
 
@@ -308,10 +299,7 @@ export default function SearchScreen() {
                 </View>
 
                 <View style={styles.placeBadge}>
-                  <MapPin
-                    size={14}
-                    color="#38A9D6"
-                  />
+                  <MapPin size={14} color="#38A9D6" />
                   <Text style={styles.placeBadgeText}>
                     {place.placesCount}
                   </Text>
@@ -321,11 +309,13 @@ export default function SearchScreen() {
           ) : (
             <View style={styles.emptyState}>
               <Search size={38} color="#AAB4BC" />
+
               <Text style={styles.emptyTitle}>
-                Орын табылмады
+                No places found
               </Text>
+
               <Text style={styles.emptySubtitle}>
-                Басқа атауды немесе санатты таңдап көр
+                Try selecting another name or category
               </Text>
 
               <TouchableOpacity
@@ -336,7 +326,7 @@ export default function SearchScreen() {
                 }}
               >
                 <Text style={styles.resetButtonText}>
-                  Сүзгіні тазарту
+                  Reset Filter
                 </Text>
               </TouchableOpacity>
             </View>
@@ -354,13 +344,13 @@ export default function SearchScreen() {
             onPress={() => navigation.navigate('Home')}
           >
             <Home size={22} color="#AEB8C0" />
-            <Text style={styles.navLabel}>Басты бет</Text>
+            <Text style={styles.navLabel}>Home</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.navItem}>
             <Search size={22} color="#FFFFFF" />
             <Text style={[styles.navLabel, styles.navLabelActive]}>
-              Іздеу
+              Search
             </Text>
           </TouchableOpacity>
 
@@ -369,7 +359,7 @@ export default function SearchScreen() {
             onPress={() => navigation.navigate('Notification')}
           >
             <Bell size={22} color="#AEB8C0" />
-            <Text style={styles.navLabel}>Хабарлама</Text>
+            <Text style={styles.navLabel}>Notification</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -377,7 +367,7 @@ export default function SearchScreen() {
             onPress={() => navigation.navigate('Profile')}
           >
             <User size={22} color="#AEB8C0" />
-            <Text style={styles.navLabel}>Профиль</Text>
+            <Text style={styles.navLabel}>Profile</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -396,7 +386,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
 
-  // ЖОҒАРҒЫ САҒАТ
+  // ЖОҒАРҒЫ СТАТУС ПАНЕЛІ
   statusBar: {
     height: 38,
     flexDirection: 'row',
@@ -408,17 +398,44 @@ const styles = StyleSheet.create({
 
   timeText: {
     fontSize: 15,
-    fontWeight: '700',
-    color: '#333333',
+    fontWeight: '800',
+    color: '#000000',
   },
 
   statusIcons: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
+    gap: 7,
   },
 
-  // ТАҚЫРЫП
+  // Кішірейтілген iPhone батарея дизайны
+  batteryContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  batteryBody: {
+    width: 20,
+    height: 12,
+    borderWidth: 1.2,
+    borderColor: '#000000',
+    borderRadius: 2.5,
+    padding: 1,
+    justifyContent: 'center',
+  },
+  batteryFill: {
+    flex: 1,
+    backgroundColor: '#000000',
+    borderRadius: 1,
+  },
+  batteryTip: {
+    width: 1.5,
+    height: 4,
+    backgroundColor: '#000000',
+    borderTopRightRadius: 1,
+    borderBottomRightRadius: 1,
+    marginLeft: 0.5,
+  },
+
   header: {
     marginBottom: 22,
   },
@@ -436,7 +453,6 @@ const styles = StyleSheet.create({
     marginTop: 7,
   },
 
-  // ІЗДЕУ
   searchBox: {
     height: 54,
     flexDirection: 'row',
@@ -457,7 +473,6 @@ const styles = StyleSheet.create({
     color: '#252D33',
   },
 
-  // САНАТТАР
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -513,7 +528,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  // ОРЫНДАР ТІЗІМІ
   listContainer: {
     marginTop: 0,
   },
@@ -584,7 +598,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  // НӘТИЖЕ ЖОҚ КЕЗДЕ
   emptyState: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -619,7 +632,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 
-  // ТӨМЕНГІ МӘЗІР
   bottomBarWrapper: {
     position: 'absolute',
     bottom: 13,

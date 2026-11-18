@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
+  StatusBar,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {
@@ -14,201 +15,205 @@ import {
   Search,
   Bell,
   User,
-  Plane,
-  MapPin,
-  Percent,
-  CalendarCheck,
   Wifi,
-  BatteryCharging,
   Signal,
+  CheckCircle2,
 } from 'lucide-react-native';
 
-const NOTIFICATIONS = [
+const NOTIFICATIONS_DATA = [
   {
     id: 1,
-    text: 'Париж бен Римге арналған күзгі турларға 25% жеңілдік ашылды.',
-    date: '17 Қараша, 2026',
-    type: 'offer',
+    title: 'Component asset rectangle hand export',
+    description: 'Horizontal flows duplicate mask select.',
+    date: 'June 10, 2026',
   },
   {
     id: 2,
-    text: 'Мальдив аралдарындағы қонақүйді брондау сәтті расталды.',
-    date: '15 Қараша, 2026',
-    type: 'booking',
+    title: 'Component asset rectangle hand export',
+    description: 'Horizontal flows duplicate mask select.',
+    date: 'June 10, 2026',
   },
   {
     id: 3,
-    text: 'Швейцария Альпілеріне шаңғы тебу маусымына билеттер сатылымға шықты.',
-    date: '12 Қараша, 2026',
-    type: 'plane',
+    title: 'Component asset rectangle hand export',
+    description: 'Horizontal flows duplicate mask select.',
+    date: 'June 10, 2026',
   },
   {
     id: 4,
-    text: 'Бали аралына саяхат алдындағы сақтандыру құжаттары дайын.',
-    date: '10 Қараша, 2026',
-    type: 'map',
+    title: 'Component asset rectangle hand export',
+    description: 'Horizontal flows duplicate mask select.',
+    date: 'June 10, 2026',
   },
   {
     id: 5,
-    text: 'Дубайға 5 күндік демалыс пакетіне арнайы ұсыныс қосылды.',
-    date: '07 Қараша, 2026',
-    type: 'offer',
+    title: 'Component asset rectangle hand export',
+    description: 'Horizontal flows duplicate mask select.',
+    date: 'June 10, 2026',
   },
   {
     id: 6,
-    text: 'Жапонияға визалық қолдау қызметі жаңартылды, онлайн өтінім беріңіз.',
-    date: '04 Қараша, 2026',
-    type: 'plane',
+    title: 'Component asset rectangle hand export',
+    description: 'Horizontal flows duplicate mask select.',
+    date: 'June 10, 2026',
   },
   {
     id: 7,
-    text: 'Түркия, Анталья жағалауындағы демалыс орындарына ерте брондау басталды.',
-    date: '01 Қараша, 2026',
-    type: 'map',
+    title: 'Component asset rectangle hand export',
+    description: 'Horizontal flows duplicate mask select.',
+    date: 'June 10, 2026',
   },
 ];
 
 export default function NotificationScreen() {
   const navigation = useNavigation<any>();
-  const [activeTab, setActiveTab] = useState<'notification' | 'activity'>('notification');
-
-  const renderCircleIcon = (type: string) => {
-    switch (type) {
-      case 'plane':
-        return <Plane size={20} color="#FFFFFF" />;
-      case 'map':
-        return <MapPin size={20} color="#FFFFFF" />;
-      case 'offer':
-        return <Percent size={20} color="#FFFFFF" />;
-      default:
-        return <CalendarCheck size={20} color="#FFFFFF" />;
-    }
-  };
+  const [activeTab, setActiveTab] = useState('notification');
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Жоғарғы статус-бар (9:41 + зарядка + желі) */}
-      <View style={styles.statusBar}>
-        <Text style={styles.timeText}>9:41</Text>
-        <View style={styles.statusIcons}>
-          <Signal size={15} color="#111827" strokeWidth={2.5} />
-          <Wifi size={15} color="#111827" strokeWidth={2.5} />
-          <BatteryCharging size={18} color="#111827" strokeWidth={2.2} />
-        </View>
-      </View>
+      <StatusBar hidden={true} />
 
-      {/* Тақырып және оң жақтағы дөңгелек профиль суреті */}
-      <View style={styles.headerRow}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.title}>Хабарламалар</Text>
-          <Text style={styles.subtitle}>
-            Сіз әрдайым соңғы жаңалықтардан хабардарсыз
-          </Text>
-        </View>
-        <Image
-          source={{
-            uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80',
-          }}
-          style={styles.avatar}
-        />
-      </View>
-
-      {/* Қойындылар: Хабарлама / Белсенділік */}
-      <View style={styles.tabsRow}>
-        <TouchableOpacity
-          style={[
-            styles.tabBox,
-            activeTab === 'notification' && styles.tabBoxActive,
-          ]}
-          onPress={() => setActiveTab('notification')}
-        >
-          <Text
-            style={[
-              styles.tabLabel,
-              activeTab === 'notification' && styles.tabLabelActive,
-            ]}
-          >
-            Хабарлама
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.tabBox,
-            activeTab === 'activity' && styles.tabBoxActive,
-          ]}
-          onPress={() => setActiveTab('activity')}
-        >
-          <Text
-            style={[
-              styles.tabLabel,
-              activeTab === 'activity' && styles.tabLabelActive,
-            ]}
-          >
-            Белсенділік
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Хабарламалар тізімі */}
       <ScrollView
-        style={styles.scrollArea}
-        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
       >
-        {activeTab === 'notification' ? (
-          NOTIFICATIONS.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.notifRow}>
-              <View style={styles.blueCircle}>
-                {renderCircleIcon(item.type)}
+        {/* ЖОҒАРҒЫ СТАТУС ПАНЕЛІ (iPhone стилі) */}
+        <View style={styles.statusBar}>
+          <Text style={styles.timeText}>9:41</Text>
+          <View style={styles.statusIcons}>
+            <Signal size={17} color="#000000" strokeWidth={3} />
+            <Wifi size={17} color="#000000" strokeWidth={3} />
+            <View style={styles.batteryContainer}>
+              <View style={styles.batteryBody}>
+                <View style={styles.batteryFill} />
               </View>
+              <View style={styles.batteryTip} />
+            </View>
+          </View>
+        </View>
 
-              <View style={styles.notifBody}>
-                <Text style={styles.notifText}>{item.text}</Text>
-                <Text style={styles.notifDate}>{item.date}</Text>
-              </View>
-            </TouchableOpacity>
-          ))
-        ) : (
-          <View style={styles.emptyBox}>
-            <Text style={styles.emptyTitle}>Белсенді сапарлар әзірге жоқ</Text>
-            <Text style={styles.emptySub}>
-              Шетелдік турға тапсырыс берген соң осында көрінеді
+        {/* ЖОҒАРҒЫ БӨЛІК: ТАҚЫРЫП ЖӘНЕ ПРОФИЛЬ СУРЕТІ */}
+        <View style={styles.headerRow}>
+          <View>
+            <Text style={styles.headerTitle}>Notification</Text>
+            <Text style={styles.headerSubtitle}>
+              You'll always get the latest news
             </Text>
           </View>
-        )}
+
+          <TouchableOpacity
+            style={styles.profileButton}
+            onPress={() => navigation.navigate('Profile')}
+          >
+            <Image
+              source={{
+                uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200',
+              }}
+              style={styles.profileImage}
+            />
+          </TouchableOpacity>
+        </View>
+
+        {/* ҚОС ҚАБАТТЫ БАТЫРМА (Notification / Activity) */}
+        <View style={styles.tabContainer}>
+          <TouchableOpacity
+            style={[
+              styles.tabButton,
+              activeTab === 'notification' && styles.activeTabButton,
+            ]}
+            onPress={() => setActiveTab('notification')}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === 'notification' && styles.activeTabText,
+              ]}
+            >
+              Notification
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.tabButton,
+              activeTab === 'activity' && styles.activeTabButton,
+            ]}
+            onPress={() => setActiveTab('activity')}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === 'activity' && styles.activeTabText,
+              ]}
+            >
+              Activity
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* ХАБАРЛАМАЛАР ТІЗІМІ (Басылғанда Message экранына өтеді) */}
+        <View style={styles.listContainer}>
+          {NOTIFICATIONS_DATA.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={styles.notificationItem}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('Message')}
+            >
+              <View style={styles.iconContainer}>
+                <CheckCircle2 size={22} color="#38A9D6" />
+              </View>
+
+              <View style={styles.textContainer}>
+                <Text style={styles.notificationTitle} numberOfLines={1}>
+                  {item.title}
+                </Text>
+                <Text style={styles.notificationDesc} numberOfLines={1}>
+                  {item.description}
+                </Text>
+                <Text style={styles.notificationDate}>{item.date}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <View style={{ height: 130 }} />
       </ScrollView>
 
-      {/* Екінші фотодағыдай бірдей төменгі панель */}
-      <View style={styles.bottomBar}>
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Home')}
-        >
-          <Home size={21} color="#8E96A4" />
-          <Text style={styles.navLabel}>Басты бет</Text>
-        </TouchableOpacity>
+      {/* ТӨМЕНГІ ҚАЛҚЫМАЛЫ МӘЗІР */}
+      <View style={styles.bottomBarWrapper}>
+        <View style={styles.bottomBar}>
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => navigation.navigate('Home')}
+          >
+            <Home size={22} color="#AEB8C0" />
+            <Text style={styles.navLabel}>Home</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Search')}
-        >
-          <Search size={21} color="#8E96A4" />
-          <Text style={styles.navLabel}>Іздеу</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => navigation.navigate('Search')}
+          >
+            <Search size={22} color="#AEB8C0" />
+            <Text style={styles.navLabel}>Search</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navItem}>
-          <Bell size={21} color="#FFFFFF" />
-          <Text style={[styles.navLabel, styles.navLabelActive]}>Хабарлама</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.navItem}>
+            <Bell size={22} color="#FFFFFF" />
+            <Text style={[styles.navLabel, styles.navLabelActive]}>
+              Notification
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Favorite')}
-        >
-          <User size={21} color="#8E96A4" />
-          <Text style={styles.navLabel}>Профиль</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navItem}
+            onPress={() => navigation.navigate('Profile')}
+          >
+            <User size={22} color="#AEB8C0" />
+            <Text style={styles.navLabel}>Profile</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -217,156 +222,187 @@ export default function NotificationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingTop: 5,
   },
   statusBar: {
+    height: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingTop: 10,
-    paddingBottom: 10,
-    backgroundColor: '#F8FAFC',
+    paddingHorizontal: 5,
+    marginBottom: 15,
   },
   timeText: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#000000',
   },
   statusIcons: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
+  },
+  batteryContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  batteryBody: {
+    width: 20,
+    height: 12,
+    borderWidth: 1.5,
+    borderColor: '#000000',
+    borderRadius: 3,
+    padding: 1.5,
+    justifyContent: 'center',
+  },
+  batteryFill: {
+    flex: 1,
+    backgroundColor: '#000000',
+    borderRadius: 1.5,
+  },
+  batteryTip: {
+    width: 2,
+    height: 5,
+    backgroundColor: '#000000',
+    borderTopRightRadius: 1,
+    borderBottomRightRadius: 1,
+    marginLeft: 1,
   },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingTop: 18,
-    paddingBottom: 20,
-    gap: 12,
+    marginBottom: 22,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#111827',
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#292929',
+    letterSpacing: -0.5,
   },
-  subtitle: {
+  headerSubtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: '#858D93',
     marginTop: 4,
   },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#E5E7EB',
+  profileButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: '#DDDDDD',
+    overflow: 'hidden',
   },
-  tabsRow: {
+  profileImage: {
+    width: '100%',
+    height: '100%',
+  },
+  tabContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 24,
-    gap: 12,
-    marginBottom: 18,
+    backgroundColor: '#F5F7F8',
+    borderRadius: 25,
+    height: 48,
+    padding: 4,
+    marginBottom: 25,
+    borderWidth: 1,
+    borderColor: '#EDF0F2',
   },
-  tabBox: {
+  tabButton: {
     flex: 1,
-    height: 46,
-    borderRadius: 12,
-    backgroundColor: '#F1F5F9',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 22,
   },
-  tabBoxActive: {
-    backgroundColor: '#E2E8F0',
+  activeTabButton: {
+    backgroundColor: '#FFFFFF',
+    elevation: 2,
+    shadowColor: '#000000',
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
   },
-  tabLabel: {
-    fontSize: 15,
+  tabText: {
+    fontSize: 13,
     fontWeight: '600',
-    color: '#94A3B8',
+    color: '#858D93',
   },
-  tabLabelActive: {
-    color: '#111827',
+  activeTabText: {
+    color: '#292929',
     fontWeight: '700',
   },
-  scrollArea: {
-    flex: 1,
+  listContainer: {
+    gap: 16,
   },
-  scrollContent: {
-    paddingHorizontal: 24,
-    paddingBottom: 115,
-  },
-  notifRow: {
+  notificationItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 15,
+    paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: '#F0F2F3',
     gap: 14,
   },
-  blueCircle: {
-    width: 46,
-    height: 46,
-    borderRadius: 23,
-    backgroundColor: '#38BDF8',
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#E7F5FB',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  notifBody: {
+  textContainer: {
     flex: 1,
   },
-  notifText: {
-    fontSize: 14.5,
-    fontWeight: '500',
-    color: '#1F2937',
-    lineHeight: 20,
-  },
-  notifDate: {
-    fontSize: 12.5,
-    color: '#6B7280',
-    marginTop: 5,
-  },
-  emptyBox: {
-    paddingVertical: 60,
-    alignItems: 'center',
-  },
-  emptyTitle: {
-    fontSize: 16,
+  notificationTitle: {
+    fontSize: 14,
     fontWeight: '700',
-    color: '#4B5563',
+    color: '#293238',
+    marginBottom: 3,
   },
-  emptySub: {
-    fontSize: 13.5,
-    color: '#9CA3AF',
-    marginTop: 6,
-    textAlign: 'center',
+  notificationDesc: {
+    fontSize: 12,
+    color: '#858D93',
+    marginBottom: 4,
+  },
+  notificationDate: {
+    fontSize: 10,
+    color: '#B0B6BC',
+    fontWeight: '500',
+  },
+  bottomBarWrapper: {
+    position: 'absolute',
+    bottom: 13,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
   },
   bottomBar: {
-    position: 'absolute',
-    bottom: 20,
-    left: 22,
-    right: 22,
-    height: 68,
-    backgroundColor: '#364150',
-    borderRadius: 34,
+    width: '88%',
+    height: 76,
+    backgroundColor: '#354653',
+    borderRadius: 40,
     flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'center',
-    paddingHorizontal: 14,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    elevation: 8,
+    justifyContent: 'space-around',
+    paddingHorizontal: 8,
+    elevation: 12,
+    shadowColor: '#000000',
+    shadowOpacity: 0.22,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 5 },
   },
   navItem: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4,
+    gap: 5,
   },
   navLabel: {
-    fontSize: 11.5,
-    color: '#8E96A4',
+    fontSize: 10,
+    color: '#AEB8C0',
     fontWeight: '500',
   },
   navLabelActive: {
